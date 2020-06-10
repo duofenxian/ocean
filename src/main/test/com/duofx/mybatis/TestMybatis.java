@@ -1,14 +1,17 @@
 package com.duofx.mybatis;
 
-import com.google.common.base.Charsets;
-import com.google.common.hash.BloomFilter;
-import com.google.common.hash.Funnels;
+import com.duofx.dao.PersonMapperDao;
+import com.duofx.model.Person;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Before;
 import org.junit.Test;
 import util.BaseJunit4Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by duofx on 2020/6/9.
@@ -16,21 +19,23 @@ import java.util.Set;
 
 public class TestMybatis extends BaseJunit4Test {
 
-    @Test
-//    @Transactional   //标明此方法需使用事务
-//    @Rollback(false)  //标明使用完此方法后事务不回滚,true时为回滚
-    public void TestMybatis() {
-        System.out.println("12");
-        Map<String, String> map = new HashMap<>();
-        map.put("duofx", "1");
-        map.put("fenx", "2");
-        System.out.println(map);
-        Set<Map.Entry<String, String>> entries = map.entrySet();
-        for (Map.Entry<String, String> m : entries) {
-            System.out.println(m.getKey());
-            System.out.println(m.getValue());
-        }
+    private SqlSessionFactory factory;
 
+    @Before
+    public void init() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+        factory = builder.build(inputStream);
+        inputStream.close();
+    }
+
+    @Test
+    public void TestMybatis() throws IOException {
+        SqlSession sqlSession = factory.openSession();
+        PersonMapperDao mapper = sqlSession.getMapper(PersonMapperDao.class);
+        Person personById = mapper.findPersonById(1);
+        System.out.println(personById);
 
     }
 

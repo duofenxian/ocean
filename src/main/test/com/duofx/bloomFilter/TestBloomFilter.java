@@ -6,6 +6,9 @@ import com.google.common.hash.Funnels;
 import org.junit.Test;
 import util.BaseJunit4Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by duofx on 2020/6/9.
  */
@@ -29,5 +32,12 @@ public class TestBloomFilter extends BaseJunit4Test {
         System.out.println("已匹配数量 " + count);
     }
 
+
+    @Test
+    public void TestFinalList(){
+        final List<String> list = new ArrayList<>();
+        list.add("ss");
+        System.out.println(list);
+    }
 
 }
